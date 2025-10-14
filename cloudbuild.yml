@@ -3,7 +3,7 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'gcr.io/$PROJECT_ID/dhruv-mistry-test'
+      - 'gcr.io/$PROJECT_ID/dhruv-mistry-test:$COMMMIT_SHA'
       - '.'
 
 images:
