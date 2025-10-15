@@ -1,6 +1,5 @@
 substitutions:
   _IMAGE_NAME: 'dhruv-mistry-test'
-  _GITHUB_REMOTE_URL: 'https://${_GITHUB_PAT}@github.com/dhruvmistry2000/test-cs.git'
 
 
 steps:
@@ -57,10 +56,8 @@ steps:
 
         if ! git diff --cached --quiet; then
           git commit -m "Update deployment image to $BUILD_ID"
-          
-          # Use HTTPS remote URL with PAT embedded for authentication
-          # Note: URL encoding '@' as '%40' if needed
-          git remote set-url origin ${_GITHUB_REMOTE_URL}
+          GITHUB_REMOTE_URL="https://${_GITHUB_PAT}@github.com/dhruvmistry2000/test-cs.git"
+          git remote set-url origin "$GITHUB_REMOTE_URL"
 
           # Push commit
           git push origin HEAD
