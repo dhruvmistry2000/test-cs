@@ -58,7 +58,7 @@ steps:
           
           # Use HTTPS remote URL with PAT embedded for authentication
           # Note: URL encoding '@' as '%40' if needed
-          git remote set-url origin https://$(_GITHUB_PAT)@github.com/dhruvmistry2000/test-cs.git
+          git remote set-url origin https://$_GITHUB_PAT@github.com/dhruvmistry2000/test-cs.git
 
           # Push commit
           git push origin HEAD
