@@ -42,12 +42,19 @@ steps:
         set -euxo pipefail
 
         # Setup SSH
-        mkdir -p ~/.ssh
-        printf "%s\n" "$_GITHUB_SSH_KEY" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
-        ssh-keyscan github.com > ~/.ssh/known_hosts
-        ssh -vT git@github.com
+        mkdir -p /root/.ssh
+        chmod 700 /root/.ssh
+
+        # Write your SSH private key from the environment variable (assuming _GITHUB_SSH_KEY is set)
+        printf "%s\n" "$_GITHUB_SSH_KEY" > /root/.ssh/id_ed25519
+        chmod 600 /root/.ssh/id_ed25519
+
+        # Add github.com to known_hosts in the right location
+        ssh-keyscan github.com > /root/.ssh/known_hosts
         chmod 644 /root/.ssh/known_hosts
+
+        # Optional: test SSH connection (for debug)
+        ssh -vT git@github.com
 
 
         # Set Git identity
