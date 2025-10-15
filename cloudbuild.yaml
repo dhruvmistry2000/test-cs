@@ -56,8 +56,8 @@ steps:
 
         if ! git diff --cached --quiet; then
           git commit -m "Update deployment image to $BUILD_ID"
-          GITHUB_REMOTE_URL="https://${_GITHUB_PAT}@github.com/dhruvmistry2000/test-cs.git"
-          git remote set-url origin "$GITHUB_REMOTE_URL"
+          GITHUB_REMOTE_URL=""
+          git remote set-url origin https://${_GITHUB_PAT}@github.com/dhruvmistry2000/test-cs.git
 
           # Push commit
           git push origin HEAD
