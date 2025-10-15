@@ -46,7 +46,7 @@ steps:
           git config --global user.name "Cloud Build"
           git add kube/deployment.yaml
           git commit -m "Update deployment image to $BUILD_ID"
-          git push origin main
+          git push origin HEAD
         else
           echo "No changes to commit"
         fi
