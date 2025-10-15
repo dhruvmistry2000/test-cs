@@ -1,1 +1,3 @@
 .secrets
+kube/gcr-secret.yml
+

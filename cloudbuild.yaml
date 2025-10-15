@@ -29,6 +29,19 @@ steps:
       - 'push'
       - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:latest'
 
+- name: 'gcr.io/cloud-builders/git'
+  id: 'update-and-push-deployment'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      sed -i "s|^[[:space:]]*image: .*|        image: gcr.io/tony-test-gcr-forportal/dhruv-mistry-test:$BUILD_ID|" kube/deployment.yaml
+      git config --global user.email "cloudbuild@google.com"
+      git config --global user.name "Cloud Build"
+      git add kube/deployment.yaml
+      git commit -m "Update deployment image to $BUILD_ID"
+      git push origin HEAD
+
 images:
   - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$BUILD_ID'
   - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:latest'
