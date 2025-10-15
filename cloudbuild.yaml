@@ -64,14 +64,12 @@ steps:
         # Modify the image tag in the manifest
         sed -i "s|^[[:space:]]*image: .*|        image: gcr.io/tony-test-gcr-forportal/dhruv-mistry-test:$BUILD_ID|" kube/deployment.yaml
 
-        # Commit and push if changed
-        if [[ -n $(git status -s) ]]; then
-          git add kube/deployment.yaml
-          git commit -m "Update deployment image to $BUILD_ID"
-          git push git@github.com:dhruvmistry2000/test-cs.git HEAD
-        else
-          echo "No changes to commit"
-        fi
+
+        git remote set-url origin git@github.com:dhruvmistry2000/test-cs.git
+        git add kube/deployment.yaml
+        git commit -m "Update deployment image to $BUILD_ID"
+        git push git@github.com:dhruvmistry2000/test-cs.git HEAD
+
 
 
 images:
