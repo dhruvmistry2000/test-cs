@@ -1,5 +1,7 @@
 substitutions:
   _IMAGE_NAME: 'dhruv-mistry-test'
+  _GITHUB_REMOTE_URL: 'https://${_GITHUB_PAT}@github.com/dhruvmistry2000/test-cs.git'
+
 
 steps:
   - name: 'gcr.io/cloud-builders/docker'
@@ -58,7 +60,7 @@ steps:
           
           # Use HTTPS remote URL with PAT embedded for authentication
           # Note: URL encoding '@' as '%40' if needed
-          git remote set-url origin https://$_GITHUB_PAT@github.com/dhruvmistry2000/test-cs.git
+          git remote set-url origin ${_GITHUB_REMOTE_URL}
 
           # Push commit
           git push origin HEAD
