@@ -47,6 +47,8 @@ steps:
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan github.com > ~/.ssh/known_hosts
         ssh -vT git@github.com
+        chmod 644 /root/.ssh/known_hosts
+
 
         # Set Git identity
         git config --global user.email "cloudbuild@google.com"
