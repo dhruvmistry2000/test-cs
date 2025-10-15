@@ -36,7 +36,6 @@ steps:
     id: 'update-and-push-deployment'
     waitFor: ['push-latest']
     entrypoint: 'bash'
-    secretEnv: ['_GITHUB_SSH_KEY']
     args:
       - '-c'
       - |
