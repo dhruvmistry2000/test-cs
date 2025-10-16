@@ -47,7 +47,7 @@ steps:
         cd test-cs
         # sed "s/GOOGLE_CLOUD_PROJECT/$PROJECT_ID/g" deployment.yaml.tpl | \
         # sed "s/COMMIT_SHA/${SHORT_SHA}/g" > deployment.yaml
-        sed -i "s|^[[:space:]]*image:.*|image: gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$SHORT_SHA|" kube/deployment.yaml
+        sed -i "s|^[[:space:]]*image:.*|        image: gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$SHORT_SHA|" kube/deployment.yaml
         echo "Pushing updated deployment.yaml to GitHub..."
         git config --global user.name "${_GITHUB_USER}"
         git config --global user.email "${_GITHUB_USER_EMAIL}"
