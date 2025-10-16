@@ -17,10 +17,10 @@ steps:
         change_file=$(git diff --name-only HEAD~1 HEAD)
 
         echo "Changed files:"
-        echo "$change_file"
+        echo "$change_file_"
 
         # Check if only kube/deployment.yaml was changed
-        if echo "$change_file" | grep -qv "^kube/deployment.yaml$"; then
+        if echo "$change_file_" | grep -qv "^kube/deployment.yaml$"; then
           echo "Other files changed — continuing build."
         else
           echo "Only kube/deployment.yaml changed — skipping build."
@@ -65,11 +65,10 @@ steps:
   # Step 6: Update deployment.yaml and push back to GitHub
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: /bin/sh
-    secretEnv: ['GIT_ACCESS_TOKEN']
     args:
       - '-c'
       - |
-        git clone https://${_GITHUB_USER}:${GIT_ACCESS_TOKEN}@github.com/${_GITHUB_USER}/test-cs -b ${_CD_BRANCH}
+        git clone https://${_GITHUB_USER}:${_GIT_ACCESS_TOKEN}@github.com/${_GITHUB_USER}/test-cs -b ${_CD_BRANCH}
         echo "Updating image tag in deployment.yaml..."
         cd test-cs
 
@@ -79,7 +78,7 @@ steps:
         git config --global user.email "${_GITHUB_USER_EMAIL}"
         git add kube/deployment.yaml
         git commit -m "[Cloud Build] Updated image tag to $SHORT_SHA"
-        git push https://${_GITHUB_USER}:${GIT_ACCESS_TOKEN}@github.com/${_GITHUB_USER}/test-cs ${_CD_BRANCH}
+        git push https://${_GITHUB_USER}:${_GIT_ACCESS_TOKEN}@github.com/${_GITHUB_USER}/test-cs ${_CD_BRANCH}
 
 availableSecrets:
   secretManager:
