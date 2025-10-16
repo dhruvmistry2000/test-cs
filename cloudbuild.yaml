@@ -53,7 +53,7 @@ steps:
         git config --global user.email "${_GITHUB_USER_EMAIL}"
         git add -
         git commit -m "[Cloud Build] Updated image tag to $SHORT_SHA"
-        git push https://${_GITHUB_USER}:${GIT_ACCESS_TOKEN}@github.com/${_GITHUB_USER}/test-cs ${_CD_BRANCH}
+        git push https://${_GITHUB_USER}:${_GIT_ACCESS_TOKEN}@github.com/${_GITHUB_USER}/test-cs ${_CD_BRANCH}
 
 # availableSecrets:
 #   secretManager:
