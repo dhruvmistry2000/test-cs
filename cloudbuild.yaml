@@ -41,8 +41,8 @@ steps:
     args:
       - '-c'
       - |
-        GIT_ACCESS_TOKEN="${_GIT_ACCESS_TOKEN}"
-        git clone https://${_GITHUB_USER}:${GIT_ACCESS_TOKEN}@github.com/${_GITHUB_USER}/test-cs -b ${_CD_BRANCH}
+        # GIT_ACCESS_TOKEN="${_GIT_ACCESS_TOKEN}"
+        git clone https://${_GITHUB_USER}:${_GIT_ACCESS_TOKEN}@github.com/${_GITHUB_USER}/test-cs -b ${_CD_BRANCH}
         echo "Updating image tag version ..."
         cd springapp-deployment
         # sed "s/GOOGLE_CLOUD_PROJECT/$PROJECT_ID/g" deployment.yaml.tpl | \
