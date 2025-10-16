@@ -1,6 +1,8 @@
 substitutions:
-  _IMAGE_NAME: 'dhruv-mistry-test'
-
+  - _IMAGE_NAME: 'dhruv-mistry-test'
+  - _CD_BRANCH: 'main'
+  - _GITHUB_USER: 'dhruvmistry2000'
+  - _GITHUB_USER_EMAIL: 'dhruvmistry2000@gmail.com'
 
 steps:
   - name: 'gcr.io/cloud-builders/docker'
@@ -8,7 +10,7 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$BUILD_ID'
+      - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$SHORT_SHA'
       - '.'
 
   - name: 'gcr.io/cloud-builders/docker'
@@ -16,7 +18,7 @@ steps:
     waitFor: ['build-image']
     args:
       - 'tag'
-      - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$BUILD_ID'
+      - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$SHORT_SHA'
       - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:latest'
 
   - name: 'gcr.io/cloud-builders/docker'
@@ -24,7 +26,7 @@ steps:
     waitFor: ['tag-for-latest']
     args:
       - 'push'
-      - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$BUILD_ID'
+      - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$SHORT_SHA'
 
   - name: 'gcr.io/cloud-builders/docker'
     id: 'push-latest'
@@ -33,40 +35,33 @@ steps:
       - 'push'
       - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:latest'
 
-  - name: 'gcr.io/cloud-builders/git'
-    id: 'update-and-push-deployment'
-    waitFor: ['push-latest']
-    entrypoint: 'bash'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: /bin/sh
+    # secretEnv: ['GIT_ACCESS_TOKEN']
     args:
       - '-c'
       - |
-        set -euxo pipefail
+        GIT_ACCESS_TOKEN="${_GIT_ACCESS_TOKEN}"
+        git clone https://${_GITHUB_USER}:${GIT_ACCESS_TOKEN}@github.com/${_GITHUB_USER}/test-cs -b ${_CD_BRANCH}
+        echo "Updating image tag version ..."
+        cd springapp-deployment
+        # sed "s/GOOGLE_CLOUD_PROJECT/$PROJECT_ID/g" deployment.yaml.tpl | \
+        # sed "s/COMMIT_SHA/${SHORT_SHA}/g" > deployment.yaml
+        sed -i "s|image:.*|image: gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$SHORT_SHA|" kube/deployment.yaml
+        echo "Pushing updated deployment.yaml to GitHub..."
+        git config --global user.name "${_GITHUB_USER}"
+        git config --global user.email "${_GITHUB_USER_EMAIL}"
+        git add -
+        git commit -m "[Cloud Build] Updated image tag to $SHORT_SHA"
+        git push https://${_GITHUB_USER}:${GIT_ACCESS_TOKEN}@github.com/${_GITHUB_USER}/test-cs ${_CD_BRANCH}
 
-        # Configure git identity
-        git config --global user.email "cloudbuild@google.com"
-        git config --global user.name "Cloud Build"
+# availableSecrets:
+#   secretManager:
+#     - versionName: projects/$PROJECT_NUMBER/secrets/github-access-token/versions/latest
+#       env: 'GIT_ACCESS_TOKEN'
 
-        # Modify the image tag in the manifest
-        sed -i "s|^[[:space:]]*image: .*|         image: gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$BUILD_ID|" kube/deployment.yaml
-
-        git status
-        git diff
-
-        git add kube/deployment.yaml
-
-        if ! git diff --cached --quiet; then
-          git commit -m "Update deployment image to $BUILD_ID"
-          GITHUB_REMOTE_URL=""
-          git remote set-url origin https://${_GITHUB_PAT}@github.com/dhruvmistry2000/test-cs.git
-
-          # Push commit
-          git push origin HEAD
-        else
-          echo "No changes to commit"
-        fi
-        
 images:
-  - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$BUILD_ID'
+  - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$SHORT_SHA'
   - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:latest'
 
 options:
