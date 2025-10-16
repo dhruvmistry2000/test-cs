@@ -80,10 +80,10 @@ steps:
         git commit -m "[Cloud Build] Updated image tag to $SHORT_SHA"
         git push https://${_GITHUB_USER}:${_GIT_ACCESS_TOKEN}@github.com/${_GITHUB_USER}/test-cs ${_CD_BRANCH}
 
-availableSecrets:
-  secretManager:
-    - versionName: projects/$PROJECT_NUMBER/secrets/github-access-token/versions/latest
-      env: 'GIT_ACCESS_TOKEN'
+# availableSecrets:
+#   secretManager:
+#     - versionName: projects/$PROJECT_NUMBER/secrets/github-access-token/versions/latest
+#       env: 'GIT_ACCESS_TOKEN'
 
 images:
   - 'gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$SHORT_SHA'
