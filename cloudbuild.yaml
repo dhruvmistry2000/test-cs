@@ -6,7 +6,7 @@ substitutions:
 
 steps:
   - name: 'gcr.io/cloud-builders/git'
-    id: ['check-diff']
+    id: 'check-diff'
     entrypoint: /bin/sh
     args:
       - '-c'
@@ -27,7 +27,7 @@ steps:
 
   - name: 'gcr.io/cloud-builders/docker'
     id: 'build-image'
-    waitFor: 'check-diff'
+    waitFor: ['check-diff']
     args:
       - 'build'
       - '-t'
