@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: test-container
-        image: gcr.io/tony-test-gcr-forportal/dhruv-mistry-test:91dd95a
+        image: gcr.io/tony-test-gcr-forportal/dhruv-mistry-test:089e5de
           imagePullPolicy: Always
           ports:
             - containerPort: 80
