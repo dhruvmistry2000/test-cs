@@ -5,30 +5,8 @@ substitutions:
   _GITHUB_USER_EMAIL: 'dhruvmistry2000@gmail.com'
 
 steps:
-#   - name: 'gcr.io/cloud-builders/git'
-#     id: 'check-diff'
-#     entrypoint: /bin/sh
-#     args:
-#       - '-c'
-#       - |
-#         echo "Checking changed files..."
-#         git fetch origin ${_CD_BRANCH}
-#         change_file=$(git diff --name-only HEAD~1 HEAD)
-
-#         echo "Changed files:"
-#         echo "$change_file_"
-
-#         # Check if only kube/deployment.yaml was changed
-#         if echo "$change_file_" | grep -qv "^kube/deployment.yaml$"; then
-#           echo "Other files changed — continuing build."
-#         else
-#           echo "Only kube/deployment.yaml changed — skipping build."
-#           exit 0
-#         fi
-
   - name: 'gcr.io/cloud-builders/docker'
     id: 'build-image'
-    waitFor: ['check-diff']
     args:
       - 'build'
       - '-t'
