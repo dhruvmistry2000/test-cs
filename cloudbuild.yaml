@@ -44,7 +44,7 @@ steps:
         # GIT_ACCESS_TOKEN="${_GIT_ACCESS_TOKEN}"
         git clone https://${_GITHUB_USER}:${_GIT_ACCESS_TOKEN}@github.com/${_GITHUB_USER}/test-cs -b ${_CD_BRANCH}
         echo "Updating image tag version ..."
-        cd springapp-deployment
+        cd test-cs
         # sed "s/GOOGLE_CLOUD_PROJECT/$PROJECT_ID/g" deployment.yaml.tpl | \
         # sed "s/COMMIT_SHA/${SHORT_SHA}/g" > deployment.yaml
         sed -i "s|image:.*|image: gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$SHORT_SHA|" kube/deployment.yaml
