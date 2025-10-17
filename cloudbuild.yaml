@@ -1,5 +1,5 @@
 substitutions:
-  _IMAGE_NAME: 'dhruv-mistry-test'
+  _IMAGE_NAME: 'test-image'
   _CD_BRANCH: 'main'
   _GITHUB_USER: 'dhruvmistry2000'
   _GITHUB_USER_EMAIL: 'dhruvmistry2000@gmail.com'
